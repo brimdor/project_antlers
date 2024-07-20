@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Deer Feeder Scheduler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <h1>Deer Feeder Scheduler</h1>
+    <form action="/update_schedule" method="post">
+      <div class="input-group">
+        <label for="time1">Time 1 (HH:MM):</label>
+        <input type="text" id="time1" name="time1" value="{{ config.time1.value }}" required>
+        <label for="time1_enabled">Enable</label>
+        <input type="checkbox" id="time1_enabled" name="time1_enabled" {% if config.time1.enabled %}checked{% endif %}>
+      </div>
+      
+      <div class="input-group">
+        <label for="time2">Time 2 (HH:MM):</label>
+        <input type="text" id="time2" name="time2" value="{{ config.time2.value }}" required>
+        <label for="time2_enabled">Enable</label>
+        <input type="checkbox" id="time2_enabled" name="time2_enabled" {% if config.time2.enabled %}checked{% endif %}>
+      </div>
+      
+      <div class="input-group">
+        <label for="duration">Duration (seconds):</label>
+        <input type="number" id="duration" name="duration" value="{{ config.duration }}" min="1" required><br>
+      </div>
+      
+      <div class="input-group">
+        <label for="system_time">System Time (CST):</label>
+        <input type="text" id="system_time" name="system_time" value="{{ system_time }}" readonly><br>
+      </div>
+      
+      <input type="hidden" id="snapshot_time" name="snapshot_time" value="{{ snapshot_time }}">
+      
+      {% if success_message %}
+        <div class="success-message">{{ success_message }}</div>
+      {% endif %}
+      {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+      {% endif %}
+      
+      <div class="button-container">
+        <input type="submit" value="Update Schedule">
+        <a href="/refresh"><button type="button">Refresh</button></a>
+      </div>
+    </form>
+  </body>
+</html>
