@@ -30,7 +30,7 @@ def update_cronjobs(config):
 def get_system_time():
     tz = pytz.timezone('America/Chicago')
     now = datetime.now(tz)
-    return now.strftime('%H:%M:%S')
+    return now.strftime('%Y-%m-%d %H:%M:%S')
 
 @app.route('/')
 def index():
