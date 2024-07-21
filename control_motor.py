@@ -22,6 +22,8 @@ def read_config():
 
 if __name__ == "__main__":
     config = read_config()
+    print("config:",config)
     duration = config["duration"]
+    print("duration:",duration)
     activate_motor(duration)
     GPIO.cleanup()
