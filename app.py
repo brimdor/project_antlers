@@ -62,7 +62,7 @@ def update_schedule():
         # Update system time if needed
         if new_system_time != snapshot:
             try:
-                os.system(f"date -s '{new_system_time.strftime('%Y-%m-%d %H:%M:%S')}'")
+                os.system(f"sudo date -s '{new_system_time.strftime('%Y-%m-%d %H:%M:%S')}'")
                 print("Date/Time Update Successful!")
             except Exception as e:
                 return f"Failed to update system time: {str(e)}", 500
