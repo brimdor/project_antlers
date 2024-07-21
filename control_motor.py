@@ -3,7 +3,7 @@ import time
 import json
 
 # Pin definitions
-relay_pin = 7
+relay_pin = 4
 
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
