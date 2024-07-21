@@ -22,10 +22,10 @@ def update_cronjobs(config):
     # Add cron jobs based on the enabled status
     if config["time1"]["enabled"]:
         hour, minute = config["time1"]["value"].split(':')
-        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 /project_antlers/control_motor.py') | crontab -")
+        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 /home/antlers/project_antlers/control_motor.py') | crontab -")
     if config["time2"]["enabled"]:
         hour, minute = config["time2"]["value"].split(':')
-        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 /project_antlers/control_motor.py') | crontab -")
+        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 /home/antlers/project_antlers/control_motor.py') | crontab -")
 
 def get_system_time():
     tz = pytz.timezone('America/Chicago')
@@ -52,10 +52,22 @@ def update_schedule():
         current_system_time = request.form['system_time']
         snapshot_time = request.form['snapshot_time']
 
-        if current_system_time != snapshot_time:
+        # Validate and sanitize input
+        try:
             new_system_time = datetime.strptime(current_system_time, '%Y-%m-%d %H:%M:%S')
-            os.system(f"sudo date -s '{new_system_time.strftime('%Y-%m-%d %H:%M:%S')}'")
+            snapshot = datetime.strptime(snapshot_time, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return "Invalid date format", 400
+        print("New Time: ",new_system_time)
+        # Update system time if needed
+        if new_system_time != snapshot:
+            try:
+                os.system(f"date -s '{new_system_time.strftime('%Y-%m-%d %H:%M:%S')}'")
+                print("Date/Time Update Successful!")
+            except Exception as e:
+                return f"Failed to update system time: {str(e)}", 500
 
+        # Update configuration and cron jobs
         config = {
             "time1": {"value": time1_value, "enabled": time1_enabled},
             "time2": {"value": time2_value, "enabled": time2_enabled},
@@ -66,7 +78,6 @@ def update_schedule():
 
         success_message = "Schedule updated successfully!"
         return redirect(url_for('index', success_message=success_message))
-
     except Exception as e:
         error_message = f"Failed to update schedule: {str(e)}"
         return redirect(url_for('index', error_message=error_message))

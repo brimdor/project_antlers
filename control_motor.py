@@ -16,7 +16,7 @@ def activate_motor(duration):
     GPIO.output(relay_pin, GPIO.HIGH)
 
 def read_config():
-    with open('/project_antlers/config.json', 'r') as file:
+    with open('/home/antlers/project_antlers/config.json', 'r') as file:
         config = json.load(file)
     return config
 
