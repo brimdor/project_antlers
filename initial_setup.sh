@@ -26,7 +26,7 @@ fi
 # Ensure rc.local is executable
 sudo chmod +x "$RC_LOCAL"
 
-sudo pip -r requirements.txt --break-system-packages
+sudo pip install -r requirements.txt --break-system-packages
 
 echo "Setup complete. The app will now run on boot."
 
