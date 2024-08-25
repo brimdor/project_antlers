@@ -26,6 +26,8 @@ fi
 # Ensure rc.local is executable
 sudo chmod +x "$RC_LOCAL"
 
+sudo python -m pip -r requirements.txt
+
 echo "Setup complete. The app will now run on boot."
 
 # Run the app immediately
