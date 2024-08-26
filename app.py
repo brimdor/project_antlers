@@ -6,6 +6,8 @@ import pytz
 
 app = Flask(__name__)
 
+MOTOR_SCRIPT_PATH = os.getenv('MOTOR_SCRIPT_PATH')
+
 def read_config():
     with open('config.json', 'r') as file:
         config = json.load(file)
@@ -22,10 +24,10 @@ def update_cronjobs(config):
     # Add cron jobs based on the enabled status
     if config["time1"]["enabled"]:
         hour, minute = config["time1"]["value"].split(':')
-        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 /home/antlers/project_antlers/control_motor.py') | crontab -")
+        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 {MOTOR_SCRIPT_PATH}') | crontab -")
     if config["time2"]["enabled"]:
         hour, minute = config["time2"]["value"].split(':')
-        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 /home/antlers/project_antlers/control_motor.py') | crontab -")
+        os.system(f"(crontab -l ; echo '{minute} {hour} * * * /usr/bin/python3 {MOTOR_SCRIPT_PATH}') | crontab -")
 
 def get_system_time():
     tz = pytz.timezone('America/Chicago')

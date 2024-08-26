@@ -1,23 +1,26 @@
 #!/bin/bash
 
 # Define paths
-SCRIPT_PATH="/home/antlers/project_antlers/start_antlers.sh"
-RC_LOCAL="/etc/rc.local"
+
+export PATH_TO_SCRIPTS="/home/ubuntu/Documents/Github/project_antlers"
+export MOTOR_SCRIPT_PATH="$PATH_TO_SCRIPTS/control_motor.py"
+export START_SCRIPT_PATH="$PATH_TO_SCRIPTS/start_antlers.sh"
+export RC_LOCAL="/etc/rc.local"
 
 # Create the start_antlers.sh script
-cat > "$SCRIPT_PATH" << EOL
+cat > "$START_SCRIPT_PATH" << EOL
 #!/bin/bash
-cd /home/antlers/project_antlers
+cd $PATH_TO_SCRIPTS
 python3 app.py
 EOL
 
 # Make start_antlers.sh executable
-chmod +x "$SCRIPT_PATH"
+chmod +x "$START_SCRIPT_PATH"
 
 # Check if the line is already in rc.local
-if ! grep -q "$SCRIPT_PATH" "$RC_LOCAL"; then
+if ! grep -q "$START_SCRIPT_PATH" "$RC_LOCAL"; then
     # Add the line to rc.local before "exit 0"
-    sudo sed -i "s|^exit 0|$SCRIPT_PATH \&\nexit 0|" "$RC_LOCAL"
+    sudo sed -i "s|^exit 0|$START_SCRIPT_PATH \&\nexit 0|" "$RC_LOCAL"
     echo "Added start script to rc.local"
 else
     echo "Start script already in rc.local"
@@ -26,9 +29,9 @@ fi
 # Ensure rc.local is executable
 sudo chmod +x "$RC_LOCAL"
 
-sudo pip install -r requirements.txt --break-system-packages
+pip install -r requirements.txt --break-system-packages
 
 echo "Setup complete. The app will now run on boot."
 
 # Run the app immediately
-"$SCRIPT_PATH"
+"$START_SCRIPT_PATH"
