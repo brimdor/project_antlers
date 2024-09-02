@@ -3,7 +3,7 @@ import time
 import json
 
 # Pin definitions
-relay_pin = 7
+relay_pin = 4
 print("GPIO:",relay_pin)
 
 # GPIO setup
