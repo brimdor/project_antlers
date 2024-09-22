@@ -20,14 +20,14 @@ chmod +x "$START_SCRIPT_PATH"
 # Check if the line is already in rc.local
 if ! grep -q "$START_SCRIPT_PATH" "$RC_LOCAL"; then
     # Add the line to rc.local before "exit 0"
-    sudo sed -i "s|^exit 0|$START_SCRIPT_PATH \&\nexit 0|" "$RC_LOCAL"
+    sed -i "s|^exit 0|$START_SCRIPT_PATH \&\nexit 0|" "$RC_LOCAL"
     echo "Added start script to rc.local"
 else
     echo "Start script already in rc.local"
 fi
 
 # Ensure rc.local is executable
-sudo chmod +x "$RC_LOCAL"
+chmod +x "$RC_LOCAL"
 
 pip install -r requirements.txt --break-system-packages
 
