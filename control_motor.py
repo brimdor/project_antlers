@@ -9,12 +9,12 @@ print("GPIO:",relay_pin)
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(relay_pin, GPIO.OUT)
-GPIO.output(relay_pin, GPIO.HIGH)
+GPIO.output(relay_pin, GPIO.LOW)
 
 def activate_motor(duration):
-    GPIO.output(relay_pin, GPIO.LOW)
-    time.sleep(duration)
     GPIO.output(relay_pin, GPIO.HIGH)
+    time.sleep(duration)
+    GPIO.output(relay_pin, GPIO.LOW)
 
 def read_config():
     with open('/home/antlers/project_antlers/config.json', 'r') as file:

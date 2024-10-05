@@ -3,6 +3,7 @@ import json
 import os
 from datetime import datetime
 import pytz
+import subprocess
 
 app = Flask(__name__)
 
@@ -34,6 +35,21 @@ def get_system_time():
     now = datetime.now(tz)
     return now.strftime('%Y-%m-%d %H:%M:%S')
 
+def update_system_time(new_system_time):
+    try:
+        # Format the date and time string
+        date_string = new_system_time.strftime('%Y-%m-%d %H:%M:%S')
+        # Update the system time using sudo
+        result = subprocess.run(['date', '-s', date_string], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("Date/Time Update Successful!")
+        else:
+            print(f"Error updating date/time: {result.stderr}")
+            return f"Failed to update system time: {result.stderr}", 500
+    except Exception as e:
+        print(f"Exception occurred: {str(e)}")
+        return f"Failed to update system time: {str(e)}", 500
+
 @app.route('/')
 def index():
     config = read_config()
@@ -60,14 +76,12 @@ def update_schedule():
             snapshot = datetime.strptime(snapshot_time, '%Y-%m-%d %H:%M:%S')
         except ValueError:
             return "Invalid date format", 400
-        print("New Time: ",new_system_time)
+        
         # Update system time if needed
         if new_system_time != snapshot:
-            try:
-                os.system(f"date -s '{new_system_time.strftime('%Y-%m-%d %H:%M:%S')}'")
-                print("Date/Time Update Successful!")
-            except Exception as e:
-                return f"Failed to update system time: {str(e)}", 500
+            update_response = update_system_time(new_system_time)
+            if update_response:
+                return update_response
 
         # Update configuration and cron jobs
         config = {

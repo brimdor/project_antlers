@@ -19,6 +19,9 @@ setup_environment() {
     export MOTOR_SCRIPT_PATH="$PATH_TO_SCRIPTS/control_motor.py"
     export START_SCRIPT_PATH="$PATH_TO_SCRIPTS/start_antlers.sh"
     export RC_LOCAL="/etc/rc.local"
+    systemctl stop systemd-timesyncd
+    systemctl disable systemd-timesyncd
+    systemctl mask systemd-timesyncd
 }
 
 # Function to create the start script
